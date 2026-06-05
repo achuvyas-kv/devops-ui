@@ -21,6 +21,7 @@ import ImageUpload from "../components/ImageUpload";
 
 const Home = () => {
   const [open, setOpen] = useState(false);
+  const [orderOpen, setOrderOpen] = useState(false);
   const [userRows, setUsers] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -28,7 +29,7 @@ const Home = () => {
   const [notificationLoading, setNotificationLoading] = useState(false);
   const [orderLoading, setOrderLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  console.log(process.env.REACT_APP_API_BASE_URL);
+  const [newOrder, setNewOrder] = useState({ customer: "", amount: "", status: "pending" });
 
   useEffect(() => {
     fetchUsers();
@@ -59,6 +60,17 @@ const Home = () => {
     );
     setOrders(response.data);
     setOrderLoading(false);
+  };
+
+  const handleCreateOrder = async () => {
+    await axios.post(`${process.env.REACT_APP_API_BASE_URL}/orders`, {
+      customer: newOrder.customer,
+      amount: parseFloat(newOrder.amount),
+      status: newOrder.status,
+    });
+    setOrderOpen(false);
+    setNewOrder({ customer: "", amount: "", status: "pending" });
+    fetchOrders();
   };
 
   const handleSubmit = async (data) => {
@@ -207,9 +219,17 @@ const Home = () => {
         </Grid>
         <Grid sm={12} xs={12} md={12} lg={12}>
           <Paper style={{ padding: 50, margin: 50 }}>
-            <Typography variant="h5">
-              Orders
-            </Typography>
+            <Grid container justify="space-between">
+              <Typography variant="h5">Orders</Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setOrderOpen(true)}
+                style={{ margin: 10, height: 30 }}
+              >
+                Add Order
+              </Button>
+            </Grid>
             <Table
               aria-label="simple table"
               style={{ border: "solid 1px #E0E0E0" }}
@@ -252,6 +272,56 @@ const Home = () => {
           </Paper>
         </Grid>
       </Grid>
+      <Dialog open={orderOpen} onClose={() => setOrderOpen(false)}>
+        <div style={{ margin: 50, minWidth: 300 }}>
+          <DialogTitle style={{ fontWeight: 500, textAlign: "center" }}>
+            Add Order
+          </DialogTitle>
+          <Grid container direction="column" spacing={2}>
+            <Grid item>
+              <input
+                placeholder="Customer name"
+                value={newOrder.customer}
+                onChange={(e) => setNewOrder({ ...newOrder, customer: e.target.value })}
+                style={{ width: "100%", padding: 8, boxSizing: "border-box" }}
+              />
+            </Grid>
+            <Grid item>
+              <input
+                placeholder="Amount"
+                type="number"
+                value={newOrder.amount}
+                onChange={(e) => setNewOrder({ ...newOrder, amount: e.target.value })}
+                style={{ width: "100%", padding: 8, boxSizing: "border-box" }}
+              />
+            </Grid>
+            <Grid item>
+              <select
+                value={newOrder.status}
+                onChange={(e) => setNewOrder({ ...newOrder, status: e.target.value })}
+                style={{ width: "100%", padding: 8 }}
+              >
+                <option value="pending">pending</option>
+                <option value="confirmed">confirmed</option>
+                <option value="completed">completed</option>
+                <option value="cancelled">cancelled</option>
+              </select>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={handleCreateOrder}
+                disabled={!newOrder.customer || !newOrder.amount}
+              >
+                Create
+              </Button>
+            </Grid>
+          </Grid>
+        </div>
+      </Dialog>
+
       <Dialog open={open} onClose={() => setOpen(false)}>
         <div style={{ margin: 50 }}>
           <DialogTitle
