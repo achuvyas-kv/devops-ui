@@ -1,7 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
-import PropTypes from "prop-types";
-
-import Close from "@material-ui/icons/CloseRounded";
+import React, { useState, useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -45,22 +42,6 @@ const useStyles = makeStyles((theme) => ({
     display: "none",
   },
 }));
-
-const readUploadedFileAsURL = (inputFile) => {
-    const temporaryFileReader = new FileReader();
-  
-    return new Promise((resolve, reject) => {
-      temporaryFileReader.onerror = () => {
-        temporaryFileReader.abort();
-        reject(new DOMException('Problem parsing input file.'));
-      };
-  
-      temporaryFileReader.onload = () => {
-        resolve(temporaryFileReader.result);
-      };
-      temporaryFileReader.readAsDataURL(inputFile);
-    });
-  };
 
 const AvatarImage = (props) => {
   const { upload } = props;

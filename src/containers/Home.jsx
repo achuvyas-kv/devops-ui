@@ -144,7 +144,7 @@ const Home = () => {
                       <TableCell align="right">
                         <img
                           src={row.imageUrl}
-                          alt="image"
+                          alt=""
                           width="60"
                           height="60"
                         />
