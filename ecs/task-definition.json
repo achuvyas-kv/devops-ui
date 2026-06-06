@@ -2,7 +2,7 @@
   "family": "order-service-ui",
   "networkMode": "bridge",
   "requiresCompatibilities": ["EC2"],
-  "executionRoleArn": "arn:aws:iam::402338187344:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::402338187344:role/order-service-dev-ecs-task-execution",
 
   "containerDefinitions": [
     {

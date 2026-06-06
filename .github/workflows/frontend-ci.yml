@@ -9,7 +9,7 @@ on:
 env:
   AWS_REGION: ap-south-1
   ECR_REPOSITORY: order-service-ui
-  ECS_CLUSTER: devops-backend-cluster
+  ECS_CLUSTER: order-service-dev-cluster
   ECS_SERVICE: order-service-ui
   CONTAINER_NAME: ui
 
